@@ -9,7 +9,8 @@ fi
 username=$(id -u -n 1000)
 builddir=$(pwd)
 
-apt update && apt upgrade -y
+apt update
+apt upgrade -y
 apt install nala -y
 
 nala install nmap pulseaudio pavucontrol pcmanfm alsa-utils mpv xdg-user-dirs alacritty suckless-tools xorg feh nitrogen neofetch -y
