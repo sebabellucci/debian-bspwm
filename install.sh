@@ -16,10 +16,10 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install nala -y
 
-sudo nala install nmap pulseaudio pavucontrol pcmanfm alsa-utils mpv xdg-user-dirs alacritty suckless-tools xorg feh nitrogen neofetch -y
-sudo nala install unzip wget pavucontrol build-essential psmisc mangohud papirus-icon-theme fonts-noto-color-emoji slim -y
-sudo nala install flameshot policykit-1 blueman terminator nm-tray nm-tray-l10n thunar arandr gdebi curl htop wget build-essential devscripts software-properties-common -y
-sudo nala install bspwm sxhkd rofi apcalc dunst picom -y
+sudo nala install nmap pulseaudio pavucontrol alsa-utils mpv xdg-user-dirs suckless-tools xorg feh neofetch htop -y
+sudo nala install unzip wget curl build-essential devscripts software-properties-common psmisc mangohud papirus-icon-theme fonts-noto-color-emoji slim -y
+sudo nala install flameshot policykit-1 blueman terminator nm-tray nm-tray-l10n thunar arandr gdebi apcalc -y
+sudo nala install bspwm sxhkd rofi dunst picom -y
 
 xdg-user-dirs-update
 sudo systemctl enable slim.service
@@ -32,6 +32,9 @@ cp -R dotfiles/* ~/.config/
 cp wallpapers/* ~/Pictures/backgrounds/
 chown -R $username:$username ~/
 chmod +x ~/.config/bspwm/bspwmrc
+chmod +x ~/.config/bspwm/reasignar-ws.sh
+chmod +x ~/.config/bspwm/low_bat_notifier.sh
+chmod +x ~/.config/bspwm/systemtray.sh
 chmod +x ~/.config/polibar/launch.sh
 
 cd /tmp

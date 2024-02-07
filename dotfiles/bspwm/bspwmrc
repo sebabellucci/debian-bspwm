@@ -32,7 +32,7 @@ setxbmap -layout es &
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 # barras de polybar coloridas
-$HOME/.config/bspwm/polybar/launch.sh &
+$HOME/.config/polybar/launch.sh &
 
 # picom para las transparencias
 killall picom
