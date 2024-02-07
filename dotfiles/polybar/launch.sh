@@ -3,7 +3,7 @@
 # killall polybar
 
 ## Files and Directories
-DIR="$HOME/.config/bspwm/polybar"
+DIR="$HOME/.config/polybar"
 SFILE="$DIR/system"
 RFILE="$DIR/.system"
 MFILE="$DIR/.module"

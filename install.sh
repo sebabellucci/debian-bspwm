@@ -32,7 +32,7 @@ cp -R dotfiles/* ~/.config/
 cp wallpapers/* ~/Pictures/backgrounds/
 chown -R $username:$username ~/
 chmod +x ~/.config/bspwm/bspwmrc
-chmod +x ~/.config/polibar/lauch.sh
+chmod +x ~/.config/polibar/launch.sh
 
 cd /tmp
 git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git

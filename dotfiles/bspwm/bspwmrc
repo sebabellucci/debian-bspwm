@@ -1,39 +1,142 @@
-#! /bin/sh
+#!/bin/bash
 
-wmname LG3D &
-vmware-user-suid-wrapper &
+## Set environment path
+export BSPWM_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/bspwm"
 
+# scripts para detectar y configurar los monitores
+if [[ "$1" = 0 ]]; then
+$HOME/.config/bspwm/monitores.sh &
+else
+$HOME/.config/bspwm/reasignar-ws.sh &
+fi
+# la primera vez el script "monitores.sh" asigna los 10 Workspaces
+# luego cada vez que reinicio bspwm veo si el numero de monitores
+# ha cambiado y entonces reasigno los espacios de trabajo
+# usando el otro script
+
+# adicional se lanzan diferentes barras de polybar
+# dependiendo del numero de monitores
+# ver archivos config y launch.sh en carpeta de polybar
+# en esta rama la carpeta de polybar está dentro del
+# subdirectorio bspwm
+
+# quitar la "x" del cursor y dejar una flecha
+xsetroot -cursor_name arrow
+
+# teclado en español
+setxbmap -layout es &
+
+
+
+# shxhkd para los atajos de teclado
 pgrep -x sxhkd > /dev/null || sxhkd &
 
-bspc monitor -d I II III IV V VI VII VIII IX X
+# barras de polybar coloridas
+$HOME/.config/bspwm/polybar/launch.sh &
 
-bspc config border_width         2
-bspc config window_gap          12
+# picom para las transparencias
+killall picom
+pgrep -x picom > /dev/null || picom --config $HOME/.config/picom/picom.conf &
+# debe estar al comienzo de este archivo o a veces no funciona
 
+#  polkit para abrir aplicaciones que necesitan password de admon
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+#  se debe instalar policykit-1 que instala pkexec y polkitd
+
+
+# lanzar 2 ventanas de conky
+# info del sistema y los atajos de teclado
+killall -q conky
+conky -c $HOME/.config/conky/conky.conf &
+conky -c $HOME/.config/conky/conky-atajos-bspwm.conf &
+
+
+# script de low bat notifier
+# visto en github de jqtmviyu
+# https://github.com/jqtmviyu
+$HOME/.config/bspwm/low_bat_notifier.sh &
+
+# script para intercambiar la función de las teclas
+# Escape y Bloqueo de Mayúsculas
+# para mejorar el rendimiento al usar Vim
+# $HOME/.config/bspwm/cambiar-teclas-esc-may.sh &
+
+
+##########################################################
+# configurar bspwm y algunas reglas
+# configuración y comportamiento de las ventanas
+##########################################################
+
+#  configurar borde de las ventanas
+#  ventana activa color verde
+#  ventana inactiva color rojo
+bspc config border_width         4
+# color del borde de ventana activa
+bspc config focused_border_color "#00FF00"
+# color del borde de la ventan inactiva
+bspc config normal_border_color "#FF0000"
+##############################
+
+bspc config window_gap           6
 bspc config split_ratio          0.52
 bspc config borderless_monocle   true
 bspc config gapless_monocle      true
 
-bspc rule -a Gimp desktop='^8' state=floating follow=on
+# probar que el mouse enfoque automaticamente
+# bspc config focus_follows_pointer     true
+# al cerrar una ventana se cierra tambien la ventana activa
+# de la otra pantalla
+
+# bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a Chromium desktop='^2'
 bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
-bspc rule -a Screenkey manage=off
 
-# RESOLUCION ARANDR
+#  quito esta linea pues si la habilito
+# no aparece el icono de screenkey en el system tray
+# bspc rule -a Screenkey manage=off
+
+###################################################
+# adicionales
+###################################################
+
+# kdenlive se abre en desktop 7 y con follow on
+# se posiciona en ese Escritorio
+bspc rule -a kdenlive desktop='^7'  follow=on
+# similar para Google-chrome pero en el 6
+bspc rule -a Google-chrome desktop='^6'  follow=on
+
+# lo mismo para gimp en el escritorio 8
+bspc rule -a Gimp-2.10 desktop='^8' follow=on
+
+# y previamente he asignado los Escritorios 6, 7 y 8
+# al monitor externo - kdenlive es imposible
+# en la pantalla interna del portatil
 
 
-# WALLPAPER
-feh --bg-fill ~/Wallpaper/s4vitar.png
+# el nombre de la app se busca con xprop en la línea
+# WM_CLASS(STRING)   lo que aparezca al final de la linea
+# entre comillas
 
-# POLYBAR
-~/.config/polybar/launch.sh
 
-# CUSTOM
-bspc config focus_follows_pointer true
+#########################################################
+###  Aplicaciones adicionales
+###  necesarias para crear un Entorno de Escritorio
+#########################################################
 
-# PICOM
-picom &
-bspc config border_width 0
+# lanzar los applets del system tray de polybar
+$HOME/.config/bspwm/systemtray.sh
 
-xsetroot -cursor_name left_ptr &
+# nitrogen para el fondo de pantalla
+# nitrogen --restore &
+# ya no uso nitrogen, ahora uso feh
+
+# feh para el fondo de la pantalla
+feh --bg-center "${HOME}/Pictures/backgrounds/rio-y-palmeras.jpg"
+
+
+# dunst para las notificaciones
+pkill dunst
+dunst &
+
+
