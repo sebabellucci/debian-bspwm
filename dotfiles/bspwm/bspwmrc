@@ -27,7 +27,7 @@ bspc rule -a Screenkey manage=off
 #CUSTOM
 #feh --bg-fill $HOME/Downloads/commission-nate-w-torii-city.jpg &
 #feh --bg-fill $HOME/Downloads/skyblu.png &
-feh --bg-fill ~/Pictures/backgrounds/muelle-en-noche-estrellada.jpg
+feh --bg-fill ~/Pictures/Backgrounds/muelle-en-noche-estrellada.jpg
 #wal -i $HOME/Downloads/commission-nate-w-torii-city.jpg &
 #wal -i $HOME/Downloads/tiger.jpg &
 #. "${HOME}/.cache/wal/colors.sh"
