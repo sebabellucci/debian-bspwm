@@ -22,7 +22,7 @@ sudo nala install xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-
 sudo nala install bison flex libstartup-notification0-dev check autotools-dev libpango1.0-dev librsvg2-bin librsvg2-dev libcairo2-dev libglib2.0-dev libxkbcommon-dev libxkbcommon-x11-dev libjpeg-dev -y
 
 sudo nala install flameshot policykit-1 blueman terminator nm-tray nm-tray-l10n thunar arandr gdebi apcalc -y
-sudo nala install bspwm sxhkd rofi dunst picom polybar alacrity check slim libpam0g-dev libxrandr-dev libfreetype6-dev libimlib2-dev libxft-dev feh -y
+sudo nala install bspwm sxhkd rofi dunst picom polybar alacrity check slim slimlock libpam0g-dev libxrandr-dev libfreetype6-dev libimlib2-dev libxft-dev feh -y
 
 xdg-user-dirs-update
 sudo systemctl enable slim.service
