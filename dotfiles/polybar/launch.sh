@@ -1,84 +1,22 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-# killall polybar
+## Add this to your wm startup file.
 
-## Files and Directories
-DIR="$HOME/.config/polybar"
-SFILE="$DIR/system"
-RFILE="$DIR/.system"
-MFILE="$DIR/.module"
+# Terminate already running bar instances
+killall -q polybar
 
-## Get system variable values for various modules
-get_values() {
-	CARD=$(basename "$(find /sys/class/backlight/* | head -n 1)")
-	BATTERY=$(basename "$(find /sys/class/power_supply/*BAT* | head -n 1)")
-	ADAPTER=$( "$(find /sys/class/power_supply/*AC* | head -n 1)")
-	INTERFACE=$(ip link | awk '/state UP/ {print $2}' | tr -d :)
-}
+## Wait until the processes have been shut down
+while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
-## Write values to `system` file
-set_values() {
-	if [[ "$ADAPTER" ]]; then
-		sed -i -e "s/adapter = .*/adapter = $ADAPTER/g" "$SFILE"
-	fi
-	if [[ "$BATTERY" ]]; then
-		sed -i -e "s/battery = .*/battery = $BATTERY/g" "$SFILE"
-	fi
-	if [[ "$CARD" ]]; then
-		sed -i -e "s/graphics_card = .*/graphics_card = $CARD/g" "$SFILE"
-	fi
-	if [[ "$INTERFACE" ]]; then
-		sed -i -e "s/network_interface = .*/network_interface = $INTERFACE/g" "$SFILE"
-	fi
-}
+## Launch
 
-## Launch Polybar with selected style
-launch_bar() {
-	CARD=$(basename "$(find /sys/class/backlight/* | head -n 1)")
-	if [[ "$CARD" != *"intel_"* ]]; then
-		if [[ ! -f "$MFILE" ]]; then
-			sed -i -e 's/backlight/brightness/g' "$DIR"/config
-			touch "$MFILE"
-		fi
-	fi
+## Left bar
+polybar log -c ~/.config/polybar/current.ini &
+polybar secondary -c ~/.config/polybar/current.ini &
 
-###########################################################
-# hasta aquí el archivo es el original de axyl linux bspwm
-# se agregan unas lineas para detectar el número de monitores
-# conectados y lanzar diferentes barras de polybar
-###########################################################
+## Right bar
+polybar top -c ~/.config/polybar/current.ini &
+polybar primary -c ~/.config/polybar/current.ini &
 
-	if [[ ! $(pidof polybar) ]]; then
-           # averiguar el numero de monitores conectados
-           SCREEN=$(xrandr | grep " connected " | wc -l)
-           # La variable SCREEN valdrá 1, 2, 3, etc dependiendo lo que detecte xrandr
-
-           if [[ $SCREEN -eq 1 ]]; then
-		sleep 1
-                polybar -q barra-unica -c "$DIR"/config &
-                echo "Bars launched..."
-           fi
-
-           if [[ $SCREEN -eq 2 ]]; then
-                # Lanzar las 2 barras
-                sleep 1
-		polybar -q barra-int -c "$DIR"/config &
-                sleep 2
-                pantalla2=$(xrandr | grep " connected " | awk '{print $1}' | sed -n 2p)
-		MONITOR=$pantalla2 polybar -q barra-ext -c "$DIR"/config &
-                echo "Bars launched..."
-           fi
-
-	else
-		polybar-msg cmd restart
-	fi
-}
-
-# Execute functions
-if [[ ! -f "$RFILE" ]]; then
-	get_values
-	set_values
-	touch "$RFILE"
-fi
-
-launch_bar
+## Center bar
+polybar primary -c ~/.config/polybar/workspace.ini &

@@ -4,11 +4,12 @@
 
 # terminal emulator
 super + Return
-	/opt/kitty/bin/kitty
+	alacrity
 
 # program launcher
 super + d
-	rofi -show run
+	#rofi -show drun
+	rofi -modi run,drun,window -show drun -show-icons -sidebar-mode 
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -140,11 +141,15 @@ super + shift + b
 # ScreenShots #
 ###############
 
-@Print
-        screenshot select
 
-@Print + ctrl
-        screenshot
+super + shift + p
+	flameshot gui -p ~/Pictures/Screenshots
 
-@Print + alt
-        screenshot window
+#@Print
+#        screenshot select
+
+#@Print + ctrl
+#        screenshot
+
+#@Print + alt
+#        screenshot window
