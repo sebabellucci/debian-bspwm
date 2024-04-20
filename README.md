@@ -1,5 +1,5 @@
 # debian-bspwm
-Debian customizations from Chris Titus Tech
+Debian customizations from Sebastian Bellucci
 
 ### To install:
 
